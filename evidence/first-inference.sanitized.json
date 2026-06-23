@@ -1,0 +1,29 @@
+{
+  "evidence_type": "real_0g_compute_inference",
+  "network": "0G Compute mainnet",
+  "endpoint": "https://router-api.0g.ai/v1",
+  "model": "zai-org/GLM-5-FP8",
+  "provider": "0xd9966e13a6026Fcca4b13E7ff95c94DE268C471C",
+  "request_id": "d64eac57-e881-4b6b-8745-20ce7fd751ff",
+  "response_id": "chatcmpl-62c229a6-c50c-4ca0-be15-be566cc9d521",
+  "finish_reason": "stop",
+  "answer": "**Recommendation**\n**Do not launch publicly.** Proceed with a **closed beta** or internal pilot to gather performance data, but restrict external access until the audit clears critical vulnerabilities. For a small company, the existential risk of a security breach outweighs the short-term operational benefits of an early launch.\n\n**Assumptions**\n*   The agent processes Personally Identifiable Information (PII) or accesses sensitive backend systems/databases.\n*   The company lacks dedicated internal security engineers or \"red teaming\" expertise typical of larger firms.\n*   \"External security audit\" includes LLM-specific testing (e.g., prompt injection, data leakage) rather than just standard code reviews.\n\n**Risks**\n*   **Prompt Injection & Data Leakage:** Malicious actors trick the AI into revealing internal instructions, proprietary data, or customer PII.\n*   **Hallucination Liability:** The agent provides incorrect instructions or promises (e.g., fake refunds) that create legal or financial liability.\n*   **Compliance Violations:** Breaches may violate GDPR/CCPA, leading to fines that could bankrupt a small entity.\n*   **Reputational Fatality:** A small company lacks the brand equity to survive a public security incident; trust may be permanently lost.\n\n**Confidence**\n**95/100**. The specific vulnerabilities of AI agents (prompt injection) are too high-stakes to navigate without expert verification in a production environment.",
+  "usage": {
+    "completion_tokens": 1090,
+    "completion_tokens_details": {
+      "reasoning_tokens": 799
+    },
+    "prompt_tokens": 52,
+    "prompt_tokens_details": {
+      "cached_tokens": 0
+    },
+    "total_tokens": 1142
+  },
+  "billing": {
+    "input_cost": "130000000000000",
+    "output_cost": "8730900000000000",
+    "total_cost": "8860900000000000"
+  },
+  "raw_response_sha256": "a9c3c9be114d5559890dc967df8c530bfe3f8d8569e2665adc4e8ab80c776421",
+  "status": "PASS"
+}
