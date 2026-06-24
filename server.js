@@ -66,7 +66,7 @@ function sanitizeTrace(data) {
   };
 }
 
-async function call0G(messages, maxTokens = 220) {
+async function call0G(messages, maxTokens = 420) {
   const apiKey = process.env.ZERO_G_API_KEY;
 
   if (!apiKey) {
@@ -75,51 +75,91 @@ async function call0G(messages, maxTokens = 220) {
     throw error;
   }
 
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 90_000);
+  const tokenBudgets = [
+    maxTokens,
+    Math.max(maxTokens, 650)
+  ];
 
-  try {
-    const response = await fetch(`${BASE_URL}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${apiKey}`
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages,
-        temperature: 0.2,
-        max_tokens: maxTokens
-      }),
-      signal: controller.signal
-    });
+  let lastError;
 
-    const rawText = await response.text();
+  for (let attempt = 0; attempt < tokenBudgets.length; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 90_000);
 
-    if (!response.ok) {
-      const error = new Error(
-        `0G Router returned HTTP ${response.status}: ${rawText.slice(0, 300)}`
+    try {
+      const response = await fetch(`${BASE_URL}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`
+        },
+        body: JSON.stringify({
+          model: MODEL,
+          messages,
+          temperature: 0.2,
+          max_tokens: tokenBudgets[attempt],
+          stream: false,
+          chat_template_kwargs: {
+            enable_thinking: false
+          }
+        }),
+        signal: controller.signal
+      });
+
+      const rawText = await response.text();
+
+      if (!response.ok) {
+        const error = new Error(
+          `0G Router returned HTTP ${response.status}: ${rawText.slice(0, 300)}`
+        );
+        error.status = 502;
+        throw error;
+      }
+
+      const data = JSON.parse(rawText);
+      const message = data.choices?.[0]?.message;
+      const content =
+        typeof message?.content === "string"
+          ? message.content.trim()
+          : "";
+
+      if (content) {
+        return {
+          content,
+          trace: sanitizeTrace(data)
+        };
+      }
+
+      console.error(
+        "0G returned empty assistant content:",
+        JSON.stringify({
+          attempt: attempt + 1,
+          model: data.model,
+          finishReason: data.choices?.[0]?.finish_reason ?? null,
+          completionTokens: data.usage?.completion_tokens ?? null,
+          reasoningTokens:
+            data.usage?.completion_tokens_details?.reasoning_tokens ?? null,
+          provider: data.x_0g_trace?.provider ?? null,
+          requestId: data.x_0g_trace?.request_id ?? null
+        })
       );
-      error.status = 502;
-      throw error;
+
+      lastError = new Error(
+        "0G Router returned empty assistant content."
+      );
+      lastError.status = 502;
+    } catch (error) {
+      lastError = error;
+
+      if (attempt === tokenBudgets.length - 1) {
+        throw error;
+      }
+    } finally {
+      clearTimeout(timeout);
     }
-
-    const data = JSON.parse(rawText);
-    const content = data.choices?.[0]?.message?.content;
-
-    if (!content) {
-      const error = new Error("0G Router returned no assistant content.");
-      error.status = 502;
-      throw error;
-    }
-
-    return {
-      content,
-      trace: sanitizeTrace(data)
-    };
-  } finally {
-    clearTimeout(timeout);
   }
+
+  throw lastError;
 }
 
 function parseSynthesis(content) {
@@ -223,7 +263,7 @@ No markdown and no hidden reasoning.
           })
         }
       ],
-      260
+      500
     );
 
     const synthesis = parseSynthesis(synthesisResult.content);

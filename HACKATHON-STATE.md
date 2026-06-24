@@ -48,3 +48,22 @@ deltas:
       raw_reasoning_exposed: false
       secret_scan: PASS
     next_gate: Deploy the working application to Cloud Run
+
+  - date: 2026-06-23
+    phase: DELIVER
+    gate: inference_reliability
+    status: PASS
+    evidence_level: OBSERVED
+    changes:
+      glm_thinking_disabled: true
+      default_0g_failover: true
+      empty_content_retry_limit: 1
+      safe_token_budget_restored: true
+    validation:
+      local_http_status: 200
+      jurors: 3
+      synthesis_calls: 1
+      total_0g_calls: 4
+    external_dependency:
+      0g_compute_balance_required: true
+    next_gate: Redeploy and verify one public structured verdict
