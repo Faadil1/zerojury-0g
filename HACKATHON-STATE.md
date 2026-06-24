@@ -67,3 +67,19 @@ deltas:
     external_dependency:
       0g_compute_balance_required: true
     next_gate: Redeploy and verify one public structured verdict
+
+  - date: 2026-06-23
+    phase: AUDIT
+    gate: judge_ready_synthesis
+    status: PASS
+    evidence_level: OBSERVED
+    validation:
+      http_status: 200
+      jurors: 3
+      synthesis_structured: true
+      confidence_present: true
+      disagreements_present: 3
+      risks_present: 3
+      total_0g_calls: 4
+    submission_readiness: READY
+    next_gate: Redeploy and submit the Group Stage snapshot

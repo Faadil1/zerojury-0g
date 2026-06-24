@@ -162,6 +162,43 @@ async function call0G(messages, maxTokens = 420) {
   throw lastError;
 }
 
+function decodeJsonFragment(value) {
+  try {
+    return JSON.parse(`"${value}"`);
+  } catch {
+    return value
+      .replace(/\\"/g, '"')
+      .replace(/\\n/g, " ")
+      .replace(/\\\\/g, "\\");
+  }
+}
+
+function extractStringField(source, key) {
+  const pattern = new RegExp(
+    `"${key}"\\s*:\\s*"((?:\\\\.|[^"\\\\])*)"`,
+    "s"
+  );
+  const match = source.match(pattern);
+  return match ? decodeJsonFragment(match[1]) : "";
+}
+
+function extractArrayField(source, key) {
+  const pattern = new RegExp(
+    `"${key}"\\s*:\\s*\\[(.*?)\\]`,
+    "s"
+  );
+  const match = source.match(pattern);
+
+  if (!match) return [];
+
+  try {
+    const parsed = JSON.parse(`[${match[1]}]`);
+    return Array.isArray(parsed) ? parsed.map(String) : [];
+  } catch {
+    return [];
+  }
+}
+
 function parseSynthesis(content) {
   const cleaned = content
     .trim()
@@ -186,12 +223,20 @@ function parseSynthesis(content) {
         : null
     };
   } catch {
+    const confidenceMatch = cleaned.match(
+      /"confidence"\s*:\s*(\d{1,3})/
+    );
+
     return {
-      consensus: content,
-      disagreements: [],
-      risks: [],
-      nextStep: "",
-      confidence: null
+      consensus:
+        extractStringField(cleaned, "consensus") ||
+        "The final synthesis was incomplete. Review the independent juror perspectives below.",
+      disagreements: extractArrayField(cleaned, "disagreements"),
+      risks: extractArrayField(cleaned, "risks"),
+      nextStep: extractStringField(cleaned, "nextStep"),
+      confidence: confidenceMatch
+        ? Math.max(0, Math.min(100, Number(confidenceMatch[1])))
+        : null
     };
   }
 }
@@ -252,6 +297,10 @@ Return valid JSON only, with exactly this schema:
   "confidence": 0
 }
 Confidence must be an integer from 0 to 100.
+Keep consensus under 240 characters.
+Return at most 3 disagreements and 3 risks, each under 120 characters.
+Keep nextStep under 180 characters.
+Return one compact JSON object only.
 No markdown and no hidden reasoning.
 `.trim()
         },
@@ -263,7 +312,7 @@ No markdown and no hidden reasoning.
           })
         }
       ],
-      500
+      900
     );
 
     const synthesis = parseSynthesis(synthesisResult.content);
