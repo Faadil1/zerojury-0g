@@ -542,3 +542,14 @@ button:disabled {
     animation: none;
   }
 }
+
+.confidence strong small {
+  margin-left: 2px;
+  color: var(--ink-soft);
+  font-size: 0.34em;
+  font-weight: 700;
+}
+
+.juror-preview {
+  min-height: 7.5rem;
+}

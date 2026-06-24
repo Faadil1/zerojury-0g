@@ -58,6 +58,13 @@ form.addEventListener("submit", async (event) => {
 
     setSeatsState("resolved", "Resolved");
     renderResult(data, elapsed);
+
+    requestAnimationFrame(() => {
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    });
   } catch (error) {
     setSeatsState("idle", "Waiting");
     result.innerHTML = `
@@ -107,7 +114,7 @@ function renderResult(data, elapsed) {
         <h2>${formatText(data.synthesis.consensus)}</h2>
       </div>
       <div class="confidence">
-        <strong>${data.synthesis.confidence ?? "—"}</strong>
+        <strong>${data.synthesis.confidence ?? "—"}<small>/100</small></strong>
         <span>confidence</span>
       </div>
     </section>
@@ -173,6 +180,7 @@ function renderResult(data, elapsed) {
 
 function renderJurorCard(juror) {
   const fullText = formatText(juror.analysis);
+  const preview = createPreview(juror.analysis);
 
   return `
     <article class="juror-card juror-${juror.id}">
@@ -180,8 +188,8 @@ function renderJurorCard(juror) {
         <span></span>
         <h3>${escapeHtml(juror.title)}</h3>
       </div>
-      <div class="juror-analysis">
-        ${truncate(fullText)}
+      <div class="juror-analysis juror-preview">
+        ${escapeHtml(preview)}
       </div>
       <details>
         <summary>Read full analysis</summary>
@@ -191,10 +199,28 @@ function renderJurorCard(juror) {
   `;
 }
 
-function truncate(htmlText, limit = 220) {
-  const plain = htmlText.replace(/<[^>]+>/g, "");
-  if (plain.length <= limit) return htmlText;
-  return `${escapeHtml(plain.slice(0, limit)).trim()}…`;
+function createPreview(value, limit = 220) {
+  const plain = String(value)
+    .replace(/\*\*/g, "")
+    .replace(/(^|\n)\s*[-*]\s+/g, "$1")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (plain.length <= limit) return plain;
+
+  const slice = plain.slice(0, limit);
+  const sentenceBoundary = Math.max(
+    slice.lastIndexOf(". "),
+    slice.lastIndexOf("; "),
+    slice.lastIndexOf(", ")
+  );
+
+  const preview =
+    sentenceBoundary >= 120
+      ? slice.slice(0, sentenceBoundary + 1)
+      : slice;
+
+  return `${preview.trim()}…`;
 }
 
 function renderList(items) {
@@ -218,7 +244,13 @@ function attributeDot(text) {
 }
 
 function formatText(value = "") {
-  return escapeHtml(String(value))
+  const normalized = String(value)
+    .replace(/\r\n?/g, "\n")
+    .replace(/([:.])\s*\*\s+(?=[A-Z])/g, "$1\n• ")
+    .replace(/(^|\n)\s*[-*]\s+/g, "$1• ")
+    .trim();
+
+  return escapeHtml(normalized)
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
     .replace(/\n/g, "<br>");
 }
