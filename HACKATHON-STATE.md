@@ -105,3 +105,30 @@ deltas:
       formatting_defects_resolved: true
     production_service_modified: false
     freeze_rule: No further UI changes unless required by judge feedback or a confirmed defect
+
+  - date: 2026-06-24
+    phase: SUBMIT
+    gate: zero_cup_submission
+    status: SUBMITTED / FROZEN
+    evidence_level: LIVE
+    platform: 0G Arena
+    project: ZeroJury
+    team: Faadil Labs
+    repository: https://github.com/Faadil1/zerojury-0g
+    submitted_code_sha: 407ace330ced558c36a0d58cf38a1f1fbd4921ed
+    submitted_tag: decision-bench-v1
+    live_demo: https://zerojury-preview-48096573117.us-central1.run.app
+    verified_workflow:
+      jurors: 3
+      synthesis_calls: 1
+      total_0g_calls: 4
+      network: 0G Compute mainnet
+      providers_observed: 2
+      sponsor_proof_visible: true
+    submission_status: submitted
+    production_baseline_preserved: true
+    freeze_rule: No code, UI, evidence, assets, deployment, or submission changes unless required by organizers, a confirmed defect, or a new tournament round
+    reopen_triggers:
+      - organizer feedback
+      - confirmed submission defect
+      - advancement to next round
