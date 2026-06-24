@@ -83,3 +83,25 @@ deltas:
       total_0g_calls: 4
     submission_readiness: READY
     next_gate: Redeploy and submit the Group Stage snapshot
+
+  - date: 2026-06-24
+    phase: AUDIT
+    gate: decision_bench_live_preview
+    status: PASS
+    evidence_level: LIVE
+    branch: round32-decision-bench
+    deployed_code_sha: 407ace330ced558c36a0d58cf38a1f1fbd4921ed
+    preview_url: https://zerojury-preview-z7k2tehgxq-uc.a.run.app
+    validation:
+      real_0g_compute_call: true
+      network: mainnet
+      jurors: 3
+      inference_calls: 4
+      providers_observed: 2
+      verdict_visible: true
+      confidence_visible: true
+      sponsor_proof_visible_without_click: true
+      desktop_journey_verified: true
+      formatting_defects_resolved: true
+    production_service_modified: false
+    freeze_rule: No further UI changes unless required by judge feedback or a confirmed defect
