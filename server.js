@@ -66,7 +66,7 @@ function sanitizeTrace(data) {
   };
 }
 
-async function call0G(messages, maxTokens = 400) {
+async function call0G(messages, maxTokens = 220) {
   const apiKey = process.env.ZERO_G_API_KEY;
 
   if (!apiKey) {
@@ -223,7 +223,7 @@ No markdown and no hidden reasoning.
           })
         }
       ],
-      500
+      260
     );
 
     const synthesis = parseSynthesis(synthesisResult.content);
