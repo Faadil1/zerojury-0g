@@ -1,0 +1,107 @@
+{
+  "evidence_type": "real_zerojury_0g_compute_flow",
+  "status": "PASS",
+  "question": "Should a small software company launch an AI customer support agent before completing an external security audit?",
+  "jurors": [
+    {
+      "id": "optimist",
+      "title": "Optimist",
+      "analysis": "**Opportunity:** First-mover advantage in your market segment; early user feedback shapes a better product faster.\n\n**Upside:** Faster revenue, real-world training data, and demonstrated innovation to investors/customers. Many successful products launched with \"security in progress\" status.\n\n**Conditions for success:**\n- Complete internal security review first\n- Limit AI access to non-sensitive data initially\n- Clear customer disclosure and rapid incident response plan\n- Scheduled audit within 30-60 days post-launch\n- Terms of service limiting liability appropriately\n\n**Confidence:** Moderate-high. Startups routinely ship before formal audits\u2014the key is internal diligence, scope limitation, and transparency. If you've done solid internal review and the agent handles only low-risk interactions, the upside outweighs the risk. Delay has costs too: lost customers, slower learning, competitor head-starts.\n\nMove fast, but move thoughtfully.",
+      "trace": {
+        "model": "zai-org/GLM-5-FP8",
+        "provider": "0xb1242816181a87F597B01CE673cdadEb1c723bbF",
+        "requestId": "42d2f6ac-a911-4278-9c2e-dc63f0f89425",
+        "responseId": "chatcmpl-03cdc9fd-3fd5-4713-af49-f37082305339",
+        "usage": {
+          "completion_tokens": 359,
+          "completion_tokens_details": {
+            "reasoning_tokens": 177
+          },
+          "prompt_tokens": 67,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_tokens": 426
+        }
+      }
+    },
+    {
+      "id": "skeptic",
+      "title": "Skeptic",
+      "analysis": "**Verdict: NO**\n\n**Critical failure modes:**\n- Prompt injection attacks could extract customer PII, internal docs, or system prompts\n- AI hallucinations may provide incorrect account information, creating liability\n- Data logging practices may violate GDPR/CCPA without proper review\n\n**Hidden assumptions:**\n- You assume internal security knowledge is sufficient for AI-specific threats\n- You assume customers won't ask about security certifications\n- You assume a breach won't destroy your reputation before it's built\n\n**Confidence: High (8/10)**\n\nSmall companies are precisely *more* attractive targets because attackers assume weaker defenses. If this agent handles any",
+      "trace": {
+        "model": "zai-org/GLM-5-FP8",
+        "provider": "0xd9966e13a6026Fcca4b13E7ff95c94DE268C471C",
+        "requestId": "8b519f73-121b-42f4-836b-037cf33dbe0e",
+        "responseId": "chatcmpl-e08afbf4-8134-489a-871b-4f50206c4530",
+        "usage": {
+          "completion_tokens": 400,
+          "completion_tokens_details": {
+            "reasoning_tokens": 267
+          },
+          "prompt_tokens": 67,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_tokens": 467
+        }
+      }
+    },
+    {
+      "id": "operator",
+      "title": "Operator",
+      "analysis": "**Recommendation: No, not for production customer data.**\n\n**Execution path:**\n1. Launch internally first\u2014dogfood with employees only\n2. Complete audit in parallel (2-4 weeks typical)\n3. Staged rollout: start with non-sensitive queries only\n\n**Key mitigations if you must launch sooner:**\n- Strip all PII/access before agent sees data\n- Rate-limit and log all outputs\n- Human-in-loop for escalations",
+      "trace": {
+        "model": "zai-org/GLM-5-FP8",
+        "provider": "0xd9966e13a6026Fcca4b13E7ff95c94DE268C471C",
+        "requestId": "f04f0726-ff3f-4e2a-86a9-ebe22ee5385f",
+        "responseId": "chatcmpl-a20779db-e369-4125-8b50-d82483e66b6d",
+        "usage": {
+          "completion_tokens": 400,
+          "completion_tokens_details": {
+            "reasoning_tokens": 306
+          },
+          "prompt_tokens": 64,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "total_tokens": 464
+        }
+      }
+    }
+  ],
+  "synthesis": {
+    "consensus": "Do not launch to production customers before completing security audit. All jurors agree significant security measures are prerequisites\u2014the debate is about staging approach, not whether security can be skipped.",
+    "disagreements": [
+      "Optimist supports conditional launch with internal review and scope limitations; Skeptic and Operator oppose production launch entirely before audit",
+      "Optimist emphasizes first-mover advantage and competitive cost of delay; Skeptic argues small companies are precisely the targets who can't afford early breaches",
+      "Operator recommends internal dogfooding as middle path; Optimist suggests 30-60 day post-launch audit window"
+    ],
+    "risks": [
+      "Prompt injection attacks could expose customer PII, internal documents, or system prompts",
+      "AI hallucinations may provide incorrect account information creating legal liability",
+      "Data logging practices may violate GDPR/CCPA without formal review",
+      "Reputation damage from early breach could destroy company before it's established",
+      "Small companies assumed to have weaker defenses make attractive targets"
+    ],
+    "nextStep": "Launch internally for employee dogfooding only, complete external security audit in parallel (typically 2-4 weeks), then staged production rollout starting with non-sensitive queries and human-in-loop for escalations.",
+    "confidence": 78
+  },
+  "sponsorProof": {
+    "network": "0G Compute mainnet",
+    "router": "0G Compute Router",
+    "model": "zai-org/GLM-5-FP8",
+    "independentJurors": 3,
+    "totalInferenceCalls": 4,
+    "providers": [
+      "0xb1242816181a87F597B01CE673cdadEb1c723bbF",
+      "0xd9966e13a6026Fcca4b13E7ff95c94DE268C471C"
+    ],
+    "requestIds": [
+      "42d2f6ac-a911-4278-9c2e-dc63f0f89425",
+      "8b519f73-121b-42f4-836b-037cf33dbe0e",
+      "f04f0726-ff3f-4e2a-86a9-ebe22ee5385f",
+      "249e49f9-091a-44d0-9c3f-f57673dade2e"
+    ]
+  }
+}

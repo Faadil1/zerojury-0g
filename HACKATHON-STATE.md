@@ -26,3 +26,25 @@ deltas:
       api_key_committed: false
       raw_reasoning_published: false
     next_gate: Build the minimal ZeroJury application around the proven inference path
+
+  - date: 2026-06-23
+    phase: DELIVER
+    gate: complete_zerojury_jury_flow
+    status: PASS
+    evidence_level: OBSERVED
+    implementation:
+      jurors:
+        - Optimist
+        - Skeptic
+        - Operator
+      synthesis_calls: 1
+      total_0g_calls: 4
+      model: zai-org/GLM-5-FP8
+      providers_observed: 2
+    evidence:
+      - evidence/jury-live.sanitized.json
+    security:
+      api_key_server_side_only: true
+      raw_reasoning_exposed: false
+      secret_scan: PASS
+    next_gate: Deploy the working application to Cloud Run
