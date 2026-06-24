@@ -3,12 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ZeroJury</title>
+  <title>ZeroJury — Independent AI jurors on 0G Compute</title>
+  <meta name="description" content="Ask once. Three independent AI jurors deliberate on 0G Compute mainnet and show you exactly where they agree and where they don't.">
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">ZJ</span>
+      <span class="brand-name">ZeroJury</span>
+    </div>
+    <p class="proof-pill" role="status">
+      <span class="proof-dot" aria-hidden="true"></span>
+      Powered and verified by 0G Compute
+    </p>
+  </header>
+
   <main>
-    <p class="eyebrow">Powered by 0G Compute</p>
     <h1>Ask once. See where AI jurors agree — and where they don’t.</h1>
 
     <form id="jury-form">
@@ -21,6 +32,24 @@
       ></textarea>
       <button type="submit">Analyze with ZeroJury</button>
     </form>
+
+    <section class="bench" aria-label="The panel">
+      <article class="seat seat-optimist" data-seat="optimist">
+        <span class="seat-mark" aria-hidden="true"></span>
+        <h3>Optimist</h3>
+        <p class="seat-state">Waiting</p>
+      </article>
+      <article class="seat seat-skeptic" data-seat="skeptic">
+        <span class="seat-mark" aria-hidden="true"></span>
+        <h3>Skeptic</h3>
+        <p class="seat-state">Waiting</p>
+      </article>
+      <article class="seat seat-operator" data-seat="operator">
+        <span class="seat-mark" aria-hidden="true"></span>
+        <h3>Operator</h3>
+        <p class="seat-state">Waiting</p>
+      </article>
+    </section>
 
     <section id="result" aria-live="polite"></section>
   </main>
